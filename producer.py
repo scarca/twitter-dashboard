@@ -3,6 +3,7 @@ from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
 import time
+import json
 
 class StreamProducer(StreamListener):
 
@@ -22,9 +23,12 @@ class StreamProducer(StreamListener):
 
 
 if __name__ == '__main__':
+    keys = {}
+    with open("auth.json", "r") as authfile:
+        keys = json.load(authfile)
     producer = StreamProducer()
-    auth = OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_token, access_token_secret)
+    auth = OAuthHandler(keys["consumer_key"], keys["consumer_secret"])
+    auth.set_access_token(keys["access_token"], keys["access_token_secret"])
     stream = Stream(auth, producer)
     stream.sample()
     # while True:
